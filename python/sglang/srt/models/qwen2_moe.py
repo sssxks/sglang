@@ -518,6 +518,7 @@ class Qwen2MoeModel(nn.Module):
         prefix: str = "",
         decoder_layer_type: type[nn.Module] = Qwen2MoeDecoderLayer,
         alt_stream: Optional[torch.cuda.Stream] = None,
+        offloader_kwargs: Optional[Dict[str, Any]] = None,
     ) -> None:
         super().__init__()
         self.config = config
@@ -550,6 +551,7 @@ class Qwen2MoeModel(nn.Module):
             pp_rank=self.pp_group.rank_in_group,
             pp_size=self.pp_group.world_size,
             prefix=add_prefix("layers", prefix),
+            offloader_kwargs=offloader_kwargs,
         )
         if self.pp_group.is_last_rank:
             self.norm = RMSNorm(config.hidden_size, eps=config.rms_norm_eps)

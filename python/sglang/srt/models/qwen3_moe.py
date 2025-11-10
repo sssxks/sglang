@@ -651,12 +651,41 @@ class Qwen3MoeModel(Qwen2MoeModel):
         decoder_layer_type=Qwen3MoeDecoderLayer,
     ) -> None:
         alt_stream = torch.cuda.Stream() if _is_cuda else None
+        # Offload only expert weights via the generic offloader. This mirrors
+        # the DeepSeek-V2 pattern and ensures attention/router remain resident
+        # while experts stream in/out.
+        offloader_kwargs = dict(
+            submodule_accessor=lambda layer: (
+                layer.mlp.experts
+                if isinstance(layer.mlp, Qwen3MoeSparseMoeBlock)
+                else layer.mlp
+            ),
+            whitelist_param_names_creator=lambda module: (
+                [
+                    "w13_weight",
+                    "w2_weight",
+                    # optional blockscale tensors for certain quant paths
+                    *(
+                        [
+                            "w13_blockscale_swizzled",
+                            "w2_blockscale_swizzled",
+                        ]
+                        if hasattr(module, "w13_blockscale_swizzled")
+                        else []
+                    ),
+                ]
+                if isinstance(module, FusedMoE)
+                else []
+            ),
+        )
+
         super().__init__(
             config=config,
             quant_config=quant_config,
             prefix=prefix,
             decoder_layer_type=decoder_layer_type,
             alt_stream=alt_stream,
+            offloader_kwargs=offloader_kwargs,
         )
 
 
