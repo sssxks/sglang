@@ -7,7 +7,7 @@ name = "sglang"
 version = "0.5.5"
 description = "SGLang is a fast serving framework for large language models and vision language models."
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.10,<3.13"
 license = { file = "LICENSE" }
 classifiers = [
   "Programming Language :: Python :: 3",
@@ -62,9 +62,22 @@ dependencies = [
   "tiktoken",
   "timm==1.0.16",
   "torch_memory_saver==0.0.9",
-  "torch==2.8.0",
-  "torchaudio==2.8.0",
-  "torchvision",
+  "torch==2.8.0 ; (sys_platform != \"linux\" or platform_machine != \"aarch64\")",
+  "torch @ https://download.pytorch.org/whl/cu129/torch-2.8.0%2Bcu129-cp310-cp310-manylinux_2_28_aarch64.whl ; sys_platform == \"linux\" and platform_machine == \"aarch64\" and python_version == \"3.10\"",
+  "torch @ https://download.pytorch.org/whl/cu129/torch-2.8.0%2Bcu129-cp311-cp311-manylinux_2_28_aarch64.whl ; sys_platform == \"linux\" and platform_machine == \"aarch64\" and python_version == \"3.11\"",
+  "torch @ https://download.pytorch.org/whl/cu129/torch-2.8.0%2Bcu129-cp312-cp312-manylinux_2_28_aarch64.whl ; sys_platform == \"linux\" and platform_machine == \"aarch64\" and python_version == \"3.12\"",
+  "torchaudio==2.8.0 ; (sys_platform != \"linux\" or platform_machine != \"aarch64\")",
+  "torchaudio @ https://download.pytorch.org/whl/cu129/torchaudio-2.8.0-cp310-cp310-manylinux_2_28_aarch64.whl ; sys_platform == \"linux\" and platform_machine == \"aarch64\" and python_version == \"3.10\"",
+  "torchaudio @ https://download.pytorch.org/whl/cu129/torchaudio-2.8.0-cp311-cp311-manylinux_2_28_aarch64.whl ; sys_platform == \"linux\" and platform_machine == \"aarch64\" and python_version == \"3.11\"",
+  "torchaudio @ https://download.pytorch.org/whl/cu129/torchaudio-2.8.0-cp312-cp312-manylinux_2_28_aarch64.whl ; sys_platform == \"linux\" and platform_machine == \"aarch64\" and python_version == \"3.12\"",
+  "torchvision==0.23.0 ; (sys_platform != \"linux\" or platform_machine != \"aarch64\")",
+  "torchvision @ https://download.pytorch.org/whl/cu129/torchvision-0.23.0-cp310-cp310-manylinux_2_28_aarch64.whl ; sys_platform == \"linux\" and platform_machine == \"aarch64\" and python_version == \"3.10\"",
+  "torchvision @ https://download.pytorch.org/whl/cu129/torchvision-0.23.0-cp311-cp311-manylinux_2_28_aarch64.whl ; sys_platform == \"linux\" and platform_machine == \"aarch64\" and python_version == \"3.11\"",
+  "torchvision @ https://download.pytorch.org/whl/cu129/torchvision-0.23.0-cp312-cp312-manylinux_2_28_aarch64.whl ; sys_platform == \"linux\" and platform_machine == \"aarch64\" and python_version == \"3.12\"",
+  "triton==3.4.0 ; (sys_platform != \"linux\" or platform_machine != \"aarch64\")",
+  "triton @ https://download.pytorch.org/whl/triton-3.4.0-cp310-cp310-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl ; sys_platform == \"linux\" and platform_machine == \"aarch64\" and python_version == \"3.10\"",
+  "triton @ https://download.pytorch.org/whl/triton-3.4.0-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl ; sys_platform == \"linux\" and platform_machine == \"aarch64\" and python_version == \"3.11\"",
+  "triton @ https://download.pytorch.org/whl/triton-3.4.0-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl ; sys_platform == \"linux\" and platform_machine == \"aarch64\" and python_version == \"3.12\"",
   "torchao==0.9.0",
   "tqdm",
   "transformers==4.57.1",
